@@ -1,0 +1,6 @@
+dataset,rows_loaded,rows_expected,percent,status
+survey_2026,1187,1200,98.91666666666666,WARNING
+survey_alpha,1250,1200,104.16666666666667,OVER LIMIT
+survey_beta,1100,1200,91.66666666666666,WARNING
+survey_gamma,950,1000,95.0,WARNING
+survey_delta,850,1000,85.0,OK

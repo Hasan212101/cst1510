@@ -1,69 +1,88 @@
 """
-RECORD CHECK  -  my version
-===========================
+RECORD CHECK - my version
 
-Name  :
-Lane  :  AI / Cyber / IT      (delete two)
-Date  :
+Name : MD. IBNE HASAN RABBI
+Lane : AI and Data Science
+Date : 
 
-Run it:   python template.py
+Run it: python template.py
 
 Work through the numbered sections in order. Each one tells you what it must do.
 Delete these instructions as you replace them with your code.
 """
 
-# ====================================================================== CLASS
-# 1. Define a class called Record.
-#
-#    Threshold : __init__(self, label, value, limit) storing all three as
-#                attributes. No methods yet.
-#    Typical   : add a method status(self) that returns "OVER LIMIT" (100%+),
-#                "WARNING" (90%+) or "OK", worked out from self.value and
-#                self.limit. Give it a one-line docstring.
-#    Excellent : also add over_limit_count as a class-level running total -
-#                see the note below.
+# ==================== CLASS ====================
+class Record:
+    """Represents a record check with label, value, and limit."""
+    
+    def __init__(self, label, value, limit):
+        """Initializes the Record attributes."""
+        self.label = label
+        self.value = value
+        self.limit = limit
 
-# your class goes here
-
-
-# ==================================================================== RECORDS
-# 2. Create your records.
-#
-#    Threshold : create at least 2 Record instances directly in the code.
-#    Typical   : same, but now print each one's .status() as well.
-#    Excellent : instead, write load_records(path) that reads label,value,limit
-#                lines from a file and returns a list of Record objects. Make
-#                your own data file, one record per line.
-
-records = []   # replace with your code
+    def status(self):
+        """Returns the status based on the percentage."""
+        percent = (self.value / self.limit) * 100
+        if percent >= 100:
+            return "OVER LIMIT"
+        elif percent >= 90:
+            return "WARNING"
+        else:
+            return "OK"
 
 
-# ==================================================================== OUTPUT
-# 3. Print a report for each record.
-#
-#    Threshold : label, value, limit, inside a border.
-#    Typical   : add the result of .status().
-#    Excellent : also keep a running count of how many came back OVER LIMIT
-#                across every record, and print that once, after the loop.
-#                (Simplest: a plain variable outside the loop, same pattern
-#                as Week 4. If you want it to live ON the object instead,
-#                that is a stretch worth trying - but a variable is enough.)
+# ==================== RECORDS ====================
+def load_records(path):
+    """Loads records from a file and returns a list of Record objects."""
+    records = []
+    try:
+        with open(path, "r") as file:
+            for line in file:
+                line = line.strip()
+                if line:
+                    parts = line.split(",")
+                    if len(parts) == 3:
+                        label = parts[0].strip()
+                        value = float(parts[1].strip())
+                        limit = float(parts[2].strip())
+                        records.append(Record(label, value, limit))
+    except FileNotFoundError:
+        print(f"Error: The file '{path}' was not found. Starting with an empty list.")
+    return records
+
+records = load_records("records.txt")
+
+# If records.txt is not yet created, use fallback instances for testing
+if not records:
+    records = [
+        Record("survey_2026", 1187.0, 1200.0),
+        Record("survey_test", 1300.0, 1200.0)
+    ]
+
+
+# ==================== OUTPUT ====================
+over_limit_count = 0
 
 for record in records:
+    current_status = record.status()
+    if current_status == "OVER LIMIT":
+        over_limit_count += 1
+
     print()
     print("=" * 34)
-    print(f"  RECORD CHECK  -  {record.label}")
+    print(f" RECORD CHECK - {record.label}")
+    print("=" * 34)
+    print(f"Loaded    : {record.value:>10.2f}")
+    print(f"Expected  : {record.limit:>10.2f}")
+    print(f"Status    : {current_status:>10}")
     print("=" * 34)
 
-    # your report lines go here
+print()
+print(f"Total records that came back OVER LIMIT: {over_limit_count}")
 
-    print("=" * 34)
-
-
-# ==========================================================================
-# 4. Before you finish:
+# ==================== 4. Before you finish: ====================
 #
-#    [ ] Run it and check every record's numbers by hand
-#    [ ] Check every method only reads/changes its OWN object (self) -
-#        nothing reaches outside itself
-#    [ ] Check every method and __init__ has a one-line docstring
+# [ ] Run it and check every record's numbers
+# [ ] Check r1 and r2 really are independent - change one, print both.
+# [ ] Check every method and __init__ has a one-line docstring

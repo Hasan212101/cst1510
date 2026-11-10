@@ -1,3 +1,0 @@
-survey_2026,OK
-survey_2027,OVER LIMIT
-survey_2028,OK
